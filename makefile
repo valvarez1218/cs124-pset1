@@ -1,5 +1,5 @@
 all: SpanningTrees.cc
-	g++ SpanningTrees.cc -o SpanningTrees
+	g++ SpanningTrees.cc -o randmst
 
 clean:
-	rm SpanningTrees
+	rm randmst
