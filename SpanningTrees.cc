@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <vector>
 #include <string>
 #include <utility>
@@ -40,12 +41,14 @@ struct Node {
 //      their Euclidean distance
 float EuclidDist(std::vector<float>, std::vector<float>);
 
+// Given a spanning tree as input gets the weight of the tree
+float GetTreeWeight();
+
 int main(int argc, char** argv) {
     if (argc != 4) {
         printf("You used %i arguments\n", argc);
         return -1;
     }
-
 
     printf("%s\n", argv[0]);
     printf("%s\n", argv[1]);
