@@ -54,9 +54,9 @@ int main(int argc, char** argv) {
     long numtrials = std::strtol(argv[3], nullptr, 0);
     long dimension = std::strtol(argv[4], nullptr, 0);
 
-    printf("Number of points: %i \n", numpoints);
-    printf("Number of trials: %i \n", numtrials);
-    printf("Dimension: %i \n", dimension);
+    printf("Number of points: %li \n", numpoints);
+    printf("Number of trials: %li \n", numtrials);
+    printf("Dimension: %li \n", dimension);
 
     return 0;
 }
