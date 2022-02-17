@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <math.h>
 
 using namespace std;
 // =================================================
@@ -84,11 +85,13 @@ float EuclidDist(vector<float>, vector<float>);
 // Given a spanning tree as input gets the weight of the tree
 float GetTreeWeight(MinSpanningTree);
 
+void GenerateVertice();
+
 // Fibonacci Heap implemenation
 
 // Declare an integer for number of nodes in the heap
 int no_of_nodes = 0;
-  
+
 // Function to insert a node in heap
 void insertion(float val);
 
@@ -128,6 +131,17 @@ int main(int argc, char** argv) {
         printf("Usage: ./randmst 0 numpoints numtrials dimension\n");
         return -1;
     }
+
+    // hashmap S initialized with 1 vertex
+    // hashmap NotS initialized with all other vertices (n-1)
+    
+    // For each vertex not in S we generate "weights"
+
+    // 
+
+    // Build Fibheap
+
+    // extract the minimum
 
     long numpoints = strtol(argv[2], nullptr, 0);
     long numtrials = strtol(argv[3], nullptr, 0);
