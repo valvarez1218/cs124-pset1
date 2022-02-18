@@ -4,7 +4,8 @@
 #include <string>
 #include <utility>
 #include <math.h>
-// #include <unordered_map>
+#include <time.h>
+#include <unordered_map>
 #include <algorithm>
 #include <random>
 
@@ -198,6 +199,10 @@ int main(int argc, char** argv) {
 
     float mstWeight = 0;
 
+    double cpu_time_used;
+    clock_t start, end;
+    start = clock();
+
     // vector S initialized with 1 vertex
     // vector<Vertex*> S;
     Vertex* currSVertex = new Vertex("v0", dimension);
@@ -230,6 +235,11 @@ int main(int argc, char** argv) {
     printf("%f %i %i %i\n", mstWeight/numtrials, numpoints, numtrials, dimension);
 
 
+    end = clock();
+    cpu_time_used = ((double)(end - start)) / (CLOCKS_PER_SEC);
+
+    printf("Finished in %fs", cpu_time_used);
+
     return 0;
 }
 
@@ -244,5 +254,5 @@ float GenerateRandFloat() {
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<float> dist(0.0, 1.0);
-    return dist(mt); //
+    return dist(mt);
 }
