@@ -5,7 +5,7 @@
 #include <utility>
 #include <math.h>
 // #include <unordered_map>
-#include <map>
+#include <algorithm>
 #include <random>
 
 using namespace std;
@@ -72,7 +72,7 @@ node* mini = NULL;
 // 5. add edge to min spanning tree
 
 // Given a spanning tree as input gets the weight of the tree
-float GetTreeWeight();
+// float GetTreeWeight();
 
 // generates random float in [0, 1]
 float GenerateRandFloat();
@@ -88,7 +88,9 @@ float EuclidDist(vector<float>, vector<float>);
 //      iterate through NotS
 //          for each node in NotS get edge weight to v
 //          update FibHeap depending on edge weight
-void OptimizeHeap(map<string, Vertex*>, Vertex, int);
+// void OptimizeHeap(map<string, Vertex*>, Vertex, int);
+
+void UpdateNotS(vector<pair<Vertex*, float>> &, Vertex, int);
 
 // Fibonacci Heap implemenation
 
@@ -143,39 +145,36 @@ int main(int argc, char** argv) {
     Vertex* currSVertex = new Vertex("v0", dimension);
 
     // hashmap NotS initialized with all other vertices (n-1)
-    map<string, Vertex*> NotS;
+    vector<pair<Vertex*, float>> NotS;
 
     // initialize vertices in S and Not S
     for (int i=1; i < numpoints; i++) {
         string id = "v" + to_string(i);
         Vertex* v = new Vertex(id, dimension);
-        NotS[id] = v;
+        // initialize weight greater than max which is 1
+        NotS.push_back(make_pair(v, 2.));
     }
 
-    // initialize fibonacci heap
-    for (auto entry : NotS) {
-        Vertex notSV = *(entry.second);
-        // cout << notSV.id << endl;
-        insertion(GenerateRandFloat(), notSV.id);
+    for (auto elmnt : NotS) {
+        Vertex notSV = *(elmnt.first);
+        // cout << "ID: " << notSV.id << " Weight: " << elmnt.second << endl; 
     }
 
     // while NotS is not empty update FibonacciHeap and get minimum edge
-    // while (NotS.empty() == false) {
+    while (NotS.empty() == false) {
         // pass in current version of NotS, last element in S (most recently added vertex) and dimension
-        // OptimizeHeap(NotS, currSVertex, dimension);
-        // get minimum FibNode
-        // node* minimum = Extract_min();
-        // If the FibHeap is empty break out
-        // if (minimum == NULL) {
-        //     break;
-        // }
+        UpdateNotS(NotS, *currSVertex, dimension);
+        
+        // get minimum edge
+        pair<Vertex*, float> vToMST = NotS.back();
+        NotS.pop_back();
+
         // Add min weight to MST
-        // mstWeight += minimum->weight;
-        // Vertex that gets connected to MST from Not S
-        // Vertex vToMST = *NotS[minimum->id];
-        // currSVertex = vToMST;
-        // NotS.erase(vToMST.id);
-    // }
+        cout << "Weight to be added: " << vToMST.second << endl;
+        mstWeight += vToMST.second;
+
+        currSVertex = vToMST.first;
+    }
 
     printf("MST weight: %f\n", mstWeight);
 
@@ -205,22 +204,38 @@ float GenerateRandFloat() {
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<float> dist(0.0, 1.0);
-    double doesntmatter = dist(mt);
-    return (float)rand()/(float)(RAND_MAX/1.0); //
+    return dist(mt); //
 }
 
 // NotS: vertices currently not in tree
 // SVertex: vertex in S we are currently creating edge weights to
 // dim: dimension is necessary to calculate Euclidean distance between vertices
-void OptimizeHeap(map<string, Vertex*> NotS, Vertex SVertex, int dim) {
-    for (auto entry : NotS) {
-        Vertex v = *(entry.second);
-        // if dimension is zero generate random weight in [0, 1]
+// void OptimizeHeap(map<string, Vertex*> NotS, Vertex SVertex, int dim) {
+//     for (auto entry : NotS) {
+//         Vertex v = *(entry.second);
+//         // if dimension is zero generate random weight in [0, 1]
+//         if (dim == 0) {
+//             float weight = GenerateRandFloat();
+//             printf("%f\n", weight);
+//         }
+//     }
+// }
+
+void UpdateNotS(vector<pair<Vertex*, float>> &NotS, Vertex SVertex, int dim) {
+    for (int idx = 0; idx < NotS.size(); idx++) {
+        Vertex v = *(NotS[idx].first);
+        float currWeight = NotS[idx].second;
+        // if dimension zero generate random weight in [0, 1]
         if (dim == 0) {
-            float weight = GenerateRandFloat();
-            printf("%f\n", weight);
+            float new_weight = GenerateRandFloat();
+            // cout << "Generated weight: " << new_weight << endl;
+            NotS[idx].second = (currWeight < new_weight) ? currWeight : new_weight;
+        } else {
+            float new_weight = EuclidDist(v.coords, SVertex.coords);
+            NotS[idx].second = (currWeight < new_weight) ? currWeight : new_weight;
         }
     }
+    make_heap(NotS.begin(), NotS.end());
 }
 
 // --- FIBONACCI HEAP IMPLEMENTATION ---- //
