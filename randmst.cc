@@ -159,6 +159,7 @@ int main(int argc, char** argv) {
     float TrialsSum = 0;
 
     for (int i = 0; i < numtrials; i++) {
+        srand(time(nullptr));
         TrialsSum += runTrial(numpoints, dimension);
     }
 
@@ -286,8 +287,9 @@ float EuclidDist(vector<float> coords1, vector<float> coords2) {
 }
 
 float GenerateRandFloat() {
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<float> dist(0.0, 1.0);
-    return dist(mt);
+    return float(rand())/RAND_MAX;
+    // std::random_device rd;
+    // std::mt19937 mt(rd());
+    // std::uniform_real_distribution<float> dist(0.0, 1.0);
+    // return dist(mt);
 }
