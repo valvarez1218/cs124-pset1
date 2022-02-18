@@ -28,9 +28,10 @@ using namespace std;
 //                  3 - weights assigned by 3D Euclidean distance
 //                  4 - weights assigned by 4D Euclidean distance
 
+int TEST_RUN = 1;
 
 // generates random float in [0, 1]
-float GenerateRandFloat();
+float GenerateRandFloat(float s=0.0, float e=1.0);
 
 // calculate euclidDist
 float EuclidDist(vector<float>, vector<float>);
@@ -48,7 +49,11 @@ struct Vertex {
             coords = {};
         } else {
             for (int i = 0; i < dim; i++) {
-                coords.push_back(GenerateRandFloat());
+                if (TEST_RUN == 1) {
+                    coords.push_back(GenerateRandFloat(0.2, 1.0));
+                } else {
+                    coords.push_back(GenerateRandFloat());
+                }
             }
         }
         id = i;
@@ -78,7 +83,7 @@ public:
     void siftDown(int);
 
     // iterate through heap and update weights, indices, etc.
-    void update(Vertex, int);
+    void update(Vertex, int, float);
     
     // add element to end of heap and sift up
     void insert(Vertex*, float);
@@ -95,7 +100,7 @@ MinHeap::MinHeap() {
     heapSize = 0;
 }
 
-float runTrial(int numpoints, int dimension) {
+float runTrial(int numpoints, int dimension, vector<float> &shortEdges) {
     float mstWeight = 0;
     // vector S initialized with 1 vertex
     // vector<Vertex*> S;
@@ -113,9 +118,15 @@ float runTrial(int numpoints, int dimension) {
 
     // while NotS is not empty update FibonacciHeap and get minimum edge
     while (NotS.empty() == false) {
-        
+        float test = 0.0;
+
+        if (shortEdges.size() != 0) {
+            test = shortEdges.back();
+            shortEdges.pop_back();
+        }
+
         // update heap
-        NotS.update(*currSVertex, dimension);
+        NotS.update(*currSVertex, dimension, test);
 
         pair<Vertex*, float> vToMST = NotS.getMin();
 
@@ -139,6 +150,17 @@ int main(int argc, char** argv) {
     long numtrials = strtol(argv[3], nullptr, 0);
     long dimension = strtol(argv[4], nullptr, 0);
 
+    vector<float> shortEdges;
+    float solution = 0;
+
+    if (TEST_RUN) {
+        for (int i=0; i < (numpoints - 1); i++) {
+            float val = GenerateRandFloat(0.0, 0.2);
+            shortEdges.push_back(val);
+            solution+=val;
+        }
+    }
+
     if (numpoints <= 0) {
         printf("Number of points must be a positive integer\n");
         return -1;
@@ -159,7 +181,12 @@ int main(int argc, char** argv) {
     float TrialsSum = 0;
 
     for (int i = 0; i < numtrials; i++) {
-        TrialsSum += runTrial(numpoints, dimension);
+        TrialsSum += runTrial(numpoints, dimension, shortEdges);
+    }
+
+    if (TEST_RUN == 1) {
+        printf("Running test...\n");
+        printf("Solution: %f\n", solution);
     }
 
     printf("%f %li %li %li\n", TrialsSum/numtrials, numpoints, numtrials, dimension);
@@ -225,7 +252,8 @@ void MinHeap::siftDown (int idx) {
 
 }
 
-void MinHeap::update (Vertex SVertex, int dim) {
+void MinHeap::update (Vertex SVertex, int dim, float test) {
+    int counter = 0;
     for (auto elmnt : VertexIndices) {
         Vertex v = *(elmnt.first);
         int idx = elmnt.second;
@@ -233,7 +261,7 @@ void MinHeap::update (Vertex SVertex, int dim) {
         // cout << v.id << " | " << idx << " | " << currWeight << endl;
         // if dimension zero generate random weight in [0, 1]
         if (dim == 0) {
-            float new_weight = GenerateRandFloat();
+            float new_weight = (test != 0.0 && counter == 0) ? test : GenerateRandFloat(0.2, 1.0);
             if (new_weight < currWeight) {
                 heap[idx].second = new_weight;
                 siftUp(idx);
@@ -247,6 +275,7 @@ void MinHeap::update (Vertex SVertex, int dim) {
                 siftUp(idx);
             }
         }
+        counter++;
     }
 }
 
@@ -285,9 +314,9 @@ float EuclidDist(vector<float> coords1, vector<float> coords2) {
     return sqrt(rad);
 }
 
-float GenerateRandFloat() {
+float GenerateRandFloat(float s, float e) {
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<float> dist(0.0, 1.0);
+    std::uniform_real_distribution<float> dist(s, e);
     return dist(mt);
 }
