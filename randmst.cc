@@ -152,7 +152,6 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-
     double cpu_time_used;
     clock_t start, end;
     start = clock();
@@ -163,14 +162,16 @@ int main(int argc, char** argv) {
         TrialsSum += runTrial(numpoints, dimension);
     }
 
-    // printf("MST weight: %f\n", mstWeight);
     printf("%f %li %li %li\n", TrialsSum/numtrials, numpoints, numtrials, dimension);
-
 
     end = clock();
     cpu_time_used = ((double)(end - start)) / (CLOCKS_PER_SEC);
 
-    printf("Finished in %fs\n", cpu_time_used);
+    int h = (cpu_time_used/3600); 
+	int m = (cpu_time_used -(3600*h))/60;
+	float s = (cpu_time_used -(3600.*h)-(m*60.));
+
+    printf("Finished in %d hours, %d minutes, and %f seconds\n",h,m,s);
 
     return 0;
 }
