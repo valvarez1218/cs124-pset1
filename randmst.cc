@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
     end = clock();
     cpu_time_used = ((double)(end - start)) / (CLOCKS_PER_SEC);
 
-    printf("Finished in %fs\n", cpu_time_used);
+    // printf("Finished in %fs\n", cpu_time_used);
 
     return 0;
 }
