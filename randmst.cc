@@ -4,7 +4,8 @@
 #include <string>
 #include <utility>
 #include <math.h>
-#include <unordered_map>
+// #include <unordered_map>
+#include <map>
 #include <random>
 
 using namespace std;
@@ -87,7 +88,7 @@ float EuclidDist(vector<float>, vector<float>);
 //      iterate through NotS
 //          for each node in NotS get edge weight to v
 //          update FibHeap depending on edge weight
-void OptimizeHeap(unordered_map<string, Vertex*>, Vertex, int);
+void OptimizeHeap(map<string, Vertex*>, Vertex, int);
 
 // Fibonacci Heap implemenation
 
@@ -121,7 +122,7 @@ void Decrease_weight(node* found, float val);
 // Function to find the given node
 void Find(node* mini, float old_val, float val);
   
-  
+
 // Function to display the heap
 void display();
 
@@ -142,7 +143,7 @@ int main(int argc, char** argv) {
     Vertex* currSVertex = new Vertex("v0", dimension);
 
     // hashmap NotS initialized with all other vertices (n-1)
-    unordered_map<string, Vertex*> NotS;
+    map<string, Vertex*> NotS;
 
     // initialize vertices in S and Not S
     for (int i=1; i < numpoints; i++) {
@@ -159,22 +160,22 @@ int main(int argc, char** argv) {
     }
 
     // while NotS is not empty update FibonacciHeap and get minimum edge
-    while (NotS.empty() == false) {
+    // while (NotS.empty() == false) {
         // pass in current version of NotS, last element in S (most recently added vertex) and dimension
-        OptimizeHeap(NotS, *currSVertex, dimension);
+        // OptimizeHeap(NotS, currSVertex, dimension);
         // get minimum FibNode
-        node* minimum = Extract_min();
+        // node* minimum = Extract_min();
         // If the FibHeap is empty break out
-        if (minimum == NULL) {
-            break;
-        }
+        // if (minimum == NULL) {
+        //     break;
+        // }
         // Add min weight to MST
-        mstWeight += minimum->weight;
+        // mstWeight += minimum->weight;
         // Vertex that gets connected to MST from Not S
-        Vertex* vToMST = NotS[minimum->id];
-        currSVertex = vToMST;
-        NotS.erase(vToMST->id);
-    }
+        // Vertex vToMST = *NotS[minimum->id];
+        // currSVertex = vToMST;
+        // NotS.erase(vToMST.id);
+    // }
 
     printf("MST weight: %f\n", mstWeight);
 
@@ -211,7 +212,7 @@ float GenerateRandFloat() {
 // NotS: vertices currently not in tree
 // SVertex: vertex in S we are currently creating edge weights to
 // dim: dimension is necessary to calculate Euclidean distance between vertices
-void OptimizeHeap(unordered_map<string, Vertex*> NotS, Vertex SVertex, int dim) {
+void OptimizeHeap(map<string, Vertex*> NotS, Vertex SVertex, int dim) {
     for (auto entry : NotS) {
         Vertex v = *(entry.second);
         // if dimension is zero generate random weight in [0, 1]
