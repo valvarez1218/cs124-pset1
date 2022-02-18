@@ -124,7 +124,7 @@ public:
             Vertex v = *(elmnt.first);
             int idx = elmnt.second;
             float currWeight = heap[idx].second;
-            cout << v.id << " | " << idx << " | " << currWeight << endl;
+            // cout << v.id << " | " << idx << " | " << currWeight << endl;
             // if dimension zero generate random weight in [0, 1]
             if (dim == 0) {
                 float new_weight = GenerateRandFloat();
@@ -227,6 +227,8 @@ int main(int argc, char** argv) {
     }
 
     printf("MST weight: %f\n", mstWeight);
+    printf("%f %i %i %i\n", mstWeight/numtrials, numpoints, numtrials, dimension);
+
 
     return 0;
 }
