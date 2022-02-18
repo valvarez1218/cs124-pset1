@@ -35,8 +35,12 @@ struct Vertex {
     vector<float> coords;
 
     // constructor takes as input the node's coordinates
-    Vertex(string i, vector<float> c = {}) {
-        coords = c;
+    Vertex(string i, int dim) {
+        if (dim == 0) {
+            coords = {};
+        } else {
+            coords = {1.0, 1.0};
+        }
         id = i;
     }
 };
@@ -77,7 +81,7 @@ float EuclidDist(vector<float>, vector<float>);
 
 // generates a single vertex, giving it an ID and (eventually) coordinates
 // TODO: generate coordinates
-Vertex GenerateVertex(string, int);
+// Vertex GenerateVertex(string, int);
 
 // takes NotS, current vertex in S (call it v), dimension
 //      iterate through NotS
@@ -135,7 +139,7 @@ int main(int argc, char** argv) {
 
     // vector S initialized with 1 vertex
     // vector<Vertex*> S;
-    Vertex currSVertex = GenerateVertex("v0", dimension);
+    Vertex* currSVertex = new Vertex("v0", dimension);
 
     // hashmap NotS initialized with all other vertices (n-1)
     unordered_map<string, Vertex*> NotS;
@@ -143,20 +147,21 @@ int main(int argc, char** argv) {
     // initialize vertices in S and Not S
     for (int i=1; i < numpoints; i++) {
         string id = "v" + to_string(i);
-        Vertex v = GenerateVertex(id, dimension);
-        NotS[id] = &v;
+        Vertex* v = new Vertex(id, dimension);
+        NotS[id] = v;
     }
 
     // initialize fibonacci heap
     for (auto entry : NotS) {
         Vertex notSV = *(entry.second);
+        // cout << notSV.id << endl;
         insertion(GenerateRandFloat(), notSV.id);
     }
 
     // while NotS is not empty update FibonacciHeap and get minimum edge
     while (NotS.empty() == false) {
         // pass in current version of NotS, last element in S (most recently added vertex) and dimension
-        OptimizeHeap(NotS, currSVertex, dimension);
+        OptimizeHeap(NotS, *currSVertex, dimension);
         // get minimum FibNode
         node* minimum = Extract_min();
         // If the FibHeap is empty break out
@@ -166,9 +171,9 @@ int main(int argc, char** argv) {
         // Add min weight to MST
         mstWeight += minimum->weight;
         // Vertex that gets connected to MST from Not S
-        Vertex vToMST = *NotS[minimum->id];
+        Vertex* vToMST = NotS[minimum->id];
         currSVertex = vToMST;
-        NotS.erase(vToMST.id);
+        NotS.erase(vToMST->id);
     }
 
     printf("MST weight: %f\n", mstWeight);
@@ -177,17 +182,17 @@ int main(int argc, char** argv) {
 }
 
 
-Vertex GenerateVertex(string id, int dim) {
-    if (dim == 0) {
-        Vertex v(id);
-        return v;
-    }
-    else {
-        vector<float> coord(0, 0);
-        Vertex v(id, coord);
-        return v;
-    }
-}
+// Vertex GenerateVertex(string id, int dim) {
+//     if (dim == 0) {
+//         Vertex v(id);
+//         return v;
+//     }
+//     else {
+//         vector<float> coord(0, 0);
+//         Vertex v(id, coord);
+//         return v;
+//     }
+// }
 
 // EudlidDist takes as input the locations/coordinates of two points and returns
 // their Euclidean distance
