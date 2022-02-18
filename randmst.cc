@@ -95,39 +95,8 @@ MinHeap::MinHeap() {
     heapSize = 0;
 }
 
-int main(int argc, char** argv) {
-    if (argc != 5) {
-        std::printf("Usage: ./randmst 0 numpoints numtrials dimension\n");
-        return -1;
-    }
-
-    long numpoints = strtol(argv[2], nullptr, 0);
-    long numtrials = strtol(argv[3], nullptr, 0);
-    long dimension = strtol(argv[4], nullptr, 0);
-
-    if (numpoints <= 0) {
-        printf("Number of points must be a positive integer\n");
-        return -1;
-    }
-    if (numtrials <= 0) {
-        printf("Number of trials must be a positive integer\n");
-        return -1;
-    }
-    if (dimension != 0 && dimension != 2 && dimension != 3 && dimension != 4) {
-        printf("Dimension must be 0, 2, 3 or 4 \n");
-        return -1;
-    }
-
-
+float runTrial(int numpoints, int dimension) {
     float mstWeight = 0;
-
-    double cpu_time_used;
-    clock_t start, end;
-    start = clock();
-
-// ==================================================================================
-//  This section runs 1 trial. Separate into separate function
-// **********************************************************************************
     // vector S initialized with 1 vertex
     // vector<Vertex*> S;
     Vertex* currSVertex = new Vertex("v0", dimension);
@@ -154,12 +123,48 @@ int main(int argc, char** argv) {
         // cout << "Weight to be added: " << vToMST.second << endl;
         mstWeight += vToMST.second;
         currSVertex = vToMST.first;
+
     }
-// ***********************************************************************************
-// ===================================================================================
+
+    return mstWeight;
+}
+
+int main(int argc, char** argv) {
+    if (argc != 5) {
+        std::printf("Usage: ./randmst 0 numpoints numtrials dimension\n");
+        return -1;
+    }
+
+    long numpoints = strtol(argv[2], nullptr, 0);
+    long numtrials = strtol(argv[3], nullptr, 0);
+    long dimension = strtol(argv[4], nullptr, 0);
+
+    if (numpoints <= 0) {
+        printf("Number of points must be a positive integer\n");
+        return -1;
+    }
+    if (numtrials <= 0) {
+        printf("Number of trials must be a positive integer\n");
+        return -1;
+    }
+    if (dimension != 0 && dimension != 2 && dimension != 3 && dimension != 4) {
+        printf("Dimension must be 0, 2, 3 or 4 \n");
+        return -1;
+    }
+
+
+    double cpu_time_used;
+    clock_t start, end;
+    start = clock();
+
+    float TrialsSum = 0;
+
+    for (int i = 0; i < numtrials; i++) {
+        TrialsSum += runTrial(numpoints, dimension);
+    }
 
     // printf("MST weight: %f\n", mstWeight);
-    printf("%f %li %li %li\n", mstWeight/numtrials, numpoints, numtrials, dimension);
+    printf("%f %li %li %li\n", TrialsSum/numtrials, numpoints, numtrials, dimension);
 
 
     end = clock();
