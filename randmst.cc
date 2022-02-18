@@ -124,6 +124,7 @@ public:
             Vertex v = *(elmnt.first);
             int idx = elmnt.second;
             float currWeight = heap[idx].second;
+            cout << v.id << " | " << idx << " | " << currWeight << endl;
             // if dimension zero generate random weight in [0, 1]
             if (dim == 0) {
                 float new_weight = GenerateRandFloat();
@@ -158,6 +159,7 @@ public:
         pair<Vertex*, float> toReturn = heap[0];
         heap[0] = heap[heapSize-1];
         siftDown(0);
+        VertexIndices.erase(toReturn.first);
         heapSize--;
         return toReturn;
     }
