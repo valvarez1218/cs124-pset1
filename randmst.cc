@@ -28,19 +28,21 @@ using namespace std;
 //                  3 - weights assigned by 3D Euclidean distance
 //                  4 - weights assigned by 4D Euclidean distance
 
+int TEST_RUN = 0;
+double SOLUTION = 0.0;
 
-// generates random float in [0, 1]
-float GenerateRandFloat();
+// generates random double in [0, 1]
+double GenerateRandDouble(double lower=0.0, double upper=1.0);
 
 // calculate euclidDist
-float EuclidDist(vector<float>, vector<float>);
+double EuclidDist(vector<double>, vector<double>);
 
 // Vertex class (should we consider a simpler node class for when dimension is 0?)
 struct Vertex {
     // We should label them somehow to make it easier to generate
     //      all edges
     string id;
-    vector<float> coords;
+    vector<double> coords;
 
     // constructor takes as input the node's coordinates
     Vertex(string i, int dim) {
@@ -48,7 +50,7 @@ struct Vertex {
             coords = {};
         } else {
             for (int i = 0; i < dim; i++) {
-                coords.push_back(GenerateRandFloat());
+                coords.push_back(GenerateRandDouble());
             }
         }
         id = i;
@@ -66,7 +68,7 @@ private:
 public:
     MinHeap();
     // vector representing heap
-    vector<pair<Vertex*, float>> heap;
+    vector<pair<Vertex*, double>> heap;
 
     // swap location of two elements
     void swap(int, int);
@@ -81,10 +83,10 @@ public:
     void update(Vertex, int);
     
     // add element to end of heap and sift up
-    void insert(Vertex*, float);
+    void insert(Vertex*, double);
 
     // remove smallest element from heap
-    pair<Vertex*, float> getMin();
+    pair<Vertex*, double> getMin();
 
     // return whether or not the heap is empty
     bool empty();
@@ -95,8 +97,8 @@ MinHeap::MinHeap() {
     heapSize = 0;
 }
 
-float runTrial(int numpoints, int dimension) {
-    float mstWeight = 0;
+double runTrial(int numpoints, int dimension) {
+    double mstWeight = 0;
     // vector S initialized with 1 vertex
     // vector<Vertex*> S;
     Vertex* currSVertex = new Vertex("v0", dimension);
@@ -113,17 +115,15 @@ float runTrial(int numpoints, int dimension) {
 
     // while NotS is not empty update FibonacciHeap and get minimum edge
     while (NotS.empty() == false) {
-        
         // update heap
         NotS.update(*currSVertex, dimension);
 
-        pair<Vertex*, float> vToMST = NotS.getMin();
+        pair<Vertex*, double> vToMST = NotS.getMin();
 
         // Add min weight to MST
         // cout << "Weight to be added: " << vToMST.second << endl;
         mstWeight += vToMST.second;
         currSVertex = vToMST.first;
-
     }
 
     return mstWeight;
@@ -151,16 +151,24 @@ int main(int argc, char** argv) {
         printf("Dimension must be 0, 2, 3 or 4 \n");
         return -1;
     }
+    if (strtol(argv[1], nullptr, 0) == 1) {
+        TEST_RUN = 1;
+    }
 
     double cpu_time_used;
     clock_t start, end;
     start = clock();
 
-    float TrialsSum = 0;
+    double TrialsSum = 0.0;
 
     for (int i = 0; i < numtrials; i++) {
         srand(time(nullptr));
         TrialsSum += runTrial(numpoints, dimension);
+    }
+
+    if (TEST_RUN == 1) {
+        printf("Running test...\n");
+        printf("Solution: %f\n", SOLUTION);
     }
 
     printf("%f %li %li %li\n", TrialsSum/numtrials, numpoints, numtrials, dimension);
@@ -179,15 +187,15 @@ int main(int argc, char** argv) {
 
 
 void MinHeap::swap(int idx1, int idx2) {
-    pair<Vertex*, float> elmnt1 = heap[idx1];
-    pair<Vertex*, float> elmnt2 = heap[idx2];
+    pair<Vertex*, double> elmnt1 = heap[idx1];
+    pair<Vertex*, double> elmnt2 = heap[idx2];
 
     // swap their index values in dictionary
     VertexIndices[elmnt1.first] = idx2;
     VertexIndices[elmnt2.first] = idx1;
 
     // swap locations in heap vector
-    pair<Vertex*, float> buffer = elmnt1;
+    pair<Vertex*, double> buffer = elmnt1;
     heap[idx1] = elmnt2;
     heap[idx2] = buffer;
 }
@@ -230,11 +238,21 @@ void MinHeap::update (Vertex SVertex, int dim) {
     for (auto elmnt : VertexIndices) {
         Vertex v = *(elmnt.first);
         int idx = elmnt.second;
-        float currWeight = heap[idx].second;
+        double currWeight = heap[idx].second;
         // cout << v.id << " | " << idx << " | " << currWeight << endl;
         // if dimension zero generate random weight in [0, 1]
         if (dim == 0) {
-            float new_weight = GenerateRandFloat();
+            double new_weight = 0;
+            if (TEST_RUN == 1) {
+                if (SVertex.id == "v0") {
+                    new_weight = GenerateRandDouble(0.0, 0.2);
+                    SOLUTION+=new_weight;
+                } else {
+                    new_weight = GenerateRandDouble(0.3, 1.0);
+                }
+            } else {
+                new_weight = GenerateRandDouble();
+            }
             if (new_weight < currWeight) {
                 heap[idx].second = new_weight;
                 siftUp(idx);
@@ -242,7 +260,7 @@ void MinHeap::update (Vertex SVertex, int dim) {
         } 
         // if dimension is 2, 3 or 4 use Euclidea distances
         else {
-            float new_weight = EuclidDist(v.coords, SVertex.coords);
+            double new_weight = EuclidDist(v.coords, SVertex.coords);
             if (new_weight < currWeight) {
                 heap[idx].second = new_weight;
                 siftUp(idx);
@@ -251,8 +269,8 @@ void MinHeap::update (Vertex SVertex, int dim) {
     }
 }
 
-void MinHeap::insert(Vertex* v, float weight) {
-    pair<Vertex*, float> entry = make_pair(v, weight);
+void MinHeap::insert(Vertex* v, double weight) {
+    pair<Vertex*, double> entry = make_pair(v, weight);
     heap.push_back(entry);
     int idx = heapSize;
     VertexIndices[entry.first] = idx;
@@ -260,8 +278,8 @@ void MinHeap::insert(Vertex* v, float weight) {
     heapSize++;
 }
 
-pair<Vertex*, float> MinHeap::getMin () {
-    pair<Vertex*, float> toReturn = heap[0];
+pair<Vertex*, double> MinHeap::getMin () {
+    pair<Vertex*, double> toReturn = heap[0];
     heap[0] = heap[heapSize-1];
     siftDown(0);
     VertexIndices.erase(toReturn.first);
@@ -275,21 +293,27 @@ bool MinHeap::empty() {
 
 // EudlidDist takes as input the locations/coordinates of two points and returns
 // their Euclidean distance
-float EuclidDist(vector<float> coords1, vector<float> coords2) {
+double EuclidDist(vector<double> coords1, vector<double> coords2) {
     if (coords1.size() != coords2.size()) {
-        exit;
+        exit(0);
     }
-    float rad = 0;
+    double rad = 0;
     for (int i = 0; i < coords1.size(); i++) {
         rad += pow((coords1[i] - coords2[i]), 2);
     }
     return sqrt(rad);
 }
 
-float GenerateRandFloat() {
-    return float(rand())/RAND_MAX;
-    // std::random_device rd;
-    // std::mt19937 mt(rd());
-    // std::uniform_real_distribution<float> dist(0.0, 1.0);
-    // return dist(mt);
+double GenerateRandDouble(double lower, double upper) {
+    double random = double(rand())/RAND_MAX;
+
+    if (TEST_RUN == 1) {
+        if (random <= lower) {
+            random += lower;
+        } else if (random >= upper) {
+            random = random * upper;
+        }
+    }
+    
+    return random;
 }
