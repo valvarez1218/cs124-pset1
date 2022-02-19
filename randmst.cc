@@ -28,6 +28,8 @@ using namespace std;
 //                  3 - weights assigned by 3D Euclidean distance
 //                  4 - weights assigned by 4D Euclidean distance
 
+// RAND_MAX 2147483647
+
 int TEST_RUN = 0;
 double SOLUTION = 0.0;
 
@@ -219,10 +221,10 @@ void MinHeap::siftDown (int idx) {
 
     int smallest = idx;
     // find smallest value index
-    if (lChild < heapSize && heap[lChild] < heap[idx]) {
+    if (lChild < heapSize && heap[lChild].second < heap[idx].second) {
         smallest = lChild;
     }
-    if (rChild < heapSize && heap[rChild] < heap[smallest]) {
+    if (rChild < heapSize && heap[rChild].second < heap[smallest].second) {
         smallest = rChild;
     }
     // if current idx is not smallest index, bubble down
@@ -234,15 +236,18 @@ void MinHeap::siftDown (int idx) {
 
 }
 
+// This is where Primms algorithm is implemented
 void MinHeap::update (Vertex SVertex, int dim) {
+    // iterate through all vertices in heap
     for (auto elmnt : VertexIndices) {
         Vertex v = *(elmnt.first);
         int idx = elmnt.second;
         double currWeight = heap[idx].second;
-        // cout << v.id << " | " << idx << " | " << currWeight << endl;
+        // cout << "Vertex: " << v.id << " | Index: " << idx << " | Current Weight: " << currWeight << endl;
         // if dimension zero generate random weight in [0, 1]
         if (dim == 0) {
             double new_weight = 0;
+            // If we are running a test generate small and large weights deterministically
             if (TEST_RUN == 1) {
                 if (SVertex.id == "v0") {
                     new_weight = GenerateRandDouble(0.0, 0.2);
@@ -250,14 +255,17 @@ void MinHeap::update (Vertex SVertex, int dim) {
                 } else {
                     new_weight = GenerateRandDouble(0.3, 1.0);
                 }
-            } else {
+            }
+            else {
                 new_weight = GenerateRandDouble();
+                // cout << "Generated weight: " << new_weight << endl;
             }
             if (new_weight < currWeight) {
                 heap[idx].second = new_weight;
                 siftUp(idx);
             }
-        } 
+            // cout << "New Weight of " << v.id << ": " << heap[VertexIndices[elmnt.first]].second << endl;
+        }
         // if dimension is 2, 3 or 4 use Euclidea distances
         else {
             double new_weight = EuclidDist(v.coords, SVertex.coords);
@@ -279,6 +287,10 @@ void MinHeap::insert(Vertex* v, double weight) {
 }
 
 pair<Vertex*, double> MinHeap::getMin () {
+    // for (auto elmnt : heap) {
+    //     cout << elmnt.first->id << " | " << elmnt.second << endl;;
+    // }
+    // cout << "MINIMUM: " << heap[0].first->id << ": " << heap[0].second << endl;
     pair<Vertex*, double> toReturn = heap[0];
     heap[0] = heap[heapSize-1];
     siftDown(0);
@@ -305,7 +317,12 @@ double EuclidDist(vector<double> coords1, vector<double> coords2) {
 }
 
 double GenerateRandDouble(double lower, double upper) {
-    double random = double(rand())/RAND_MAX;
+    // double random = double(rand())/RAND_MAX;
+    std::random_device rand_dev;
+    std::mt19937 generator(rand_dev());
+    std::uniform_real_distribution<double> dist(0.000, 1.000);
+    double random = dist(generator);
+    // cout << random << endl;
 
     if (TEST_RUN == 1) {
         if (random <= lower) {
@@ -315,5 +332,6 @@ double GenerateRandDouble(double lower, double upper) {
         }
     }
     
+    // return random;
     return random;
 }
