@@ -287,10 +287,6 @@ void MinHeap::insert(Vertex* v, double weight) {
 }
 
 pair<Vertex*, double> MinHeap::getMin () {
-    // for (auto elmnt : heap) {
-    //     cout << elmnt.first->id << " | " << elmnt.second << endl;;
-    // }
-    // cout << "MINIMUM: " << heap[0].first->id << ": " << heap[0].second << endl;
     pair<Vertex*, double> toReturn = heap[0];
     heap[0] = heap[heapSize-1];
     siftDown(0);
@@ -317,11 +313,11 @@ double EuclidDist(vector<double> coords1, vector<double> coords2) {
 }
 
 double GenerateRandDouble(double lower, double upper) {
-    // double random = double(rand())/RAND_MAX;
-    std::random_device rand_dev;
-    std::mt19937 generator(rand_dev());
-    std::uniform_real_distribution<double> dist(0.000, 1.000);
-    double random = dist(generator);
+    double random = double(rand())/RAND_MAX;
+    // std::random_device rand_dev;
+    // std::mt19937 generator(rand_dev());
+    // std::uniform_real_distribution<double> dist(0.000, 1.000);
+    // double random = dist(generator);
     // cout << random << endl;
 
     if (TEST_RUN == 1) {
