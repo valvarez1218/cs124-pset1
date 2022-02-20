@@ -1,0 +1,84 @@
+1.193014 128 5 0
+Finished in 0 hours, 0 minutes, and 0.008422 seconds
+7.856897 128 5 2
+Finished in 0 hours, 0 minutes, and 0.021403 seconds
+17.911430 128 5 3
+Finished in 0 hours, 0 minutes, and 0.023350 seconds
+29.034003 128 5 4
+Finished in 0 hours, 0 minutes, and 0.024589 seconds
+1.324428 256 5 0
+Finished in 0 hours, 0 minutes, and 0.028896 seconds
+10.777100 256 5 2
+Finished in 0 hours, 0 minutes, and 0.086414 seconds
+28.073343 256 5 3
+Finished in 0 hours, 0 minutes, and 0.093140 seconds
+47.538452 256 5 4
+Finished in 0 hours, 0 minutes, and 0.097215 seconds
+1.199440 512 5 0
+Finished in 0 hours, 0 minutes, and 0.109180 seconds
+15.139077 512 5 2
+Finished in 0 hours, 0 minutes, and 0.347153 seconds
+43.458672 512 5 3
+Finished in 0 hours, 0 minutes, and 0.362539 seconds
+78.417895 512 5 4
+Finished in 0 hours, 0 minutes, and 0.379365 seconds
+1.209747 1024 5 0
+Finished in 0 hours, 0 minutes, and 0.408872 seconds
+21.060721 1024 5 2
+Finished in 0 hours, 0 minutes, and 1.316687 seconds
+68.452173 1024 5 3
+Finished in 0 hours, 0 minutes, and 1.485126 seconds
+131.154295 1024 5 4
+Finished in 0 hours, 0 minutes, and 1.429223 seconds
+1.255195 2048 5 0
+Finished in 0 hours, 0 minutes, and 1.565439 seconds
+29.723217 2048 5 2
+Finished in 0 hours, 0 minutes, and 5.084961 seconds
+107.062174 2048 5 3
+Finished in 0 hours, 0 minutes, and 5.503712 seconds
+215.619144 2048 5 4
+Finished in 0 hours, 0 minutes, and 5.702264 seconds
+1.198707 4096 5 0
+Finished in 0 hours, 0 minutes, and 6.304960 seconds
+41.791153 4096 5 2
+Finished in 0 hours, 0 minutes, and 20.555954 seconds
+168.704937 4096 5 3
+Finished in 0 hours, 0 minutes, and 21.657747 seconds
+361.993279 4096 5 4
+Finished in 0 hours, 0 minutes, and 23.044893 seconds
+1.194838 8192 5 0
+Finished in 0 hours, 0 minutes, and 25.418917 seconds
+58.828339 8192 5 2
+Finished in 0 hours, 1 minutes, and 20.681458 seconds
+267.195338 8192 5 3
+Finished in 0 hours, 1 minutes, and 25.885712 seconds
+602.501254 8192 5 4
+Finished in 0 hours, 1 minutes, and 30.791580 seconds
+1.208147 16384 5 0
+Finished in 0 hours, 1 minutes, and 42.483078 seconds
+83.148856 16384 5 2
+Finished in 0 hours, 5 minutes, and 4.459248 seconds
+421.725459 16384 5 3
+Finished in 0 hours, 5 minutes, and 20.722975 seconds
+1008.972946 16384 5 4
+Finished in 0 hours, 5 minutes, and 48.411320 seconds
+1.201239 32768 5 0
+Finished in 0 hours, 6 minutes, and 15.882529 seconds
+117.684403 32768 5 2
+Finished in 0 hours, 19 minutes, and 38.542160 seconds
+667.914893 32768 5 3
+Finished in 0 hours, 21 minutes, and 23.312189 seconds
+1687.581336 32768 5 4
+Finished in 0 hours, 22 minutes, and 37.217876 seconds
+1.207431 65536 5 0
+Finished in 0 hours, 26 minutes, and 0.837544 seconds
+165.938705 65536 5 2
+Finished in 1 hours, 31 minutes, and 23.404985 seconds
+1058.887729 65536 5 3
+Finished in 1 hours, 44 minutes, and 18.126505 seconds
+2829.519605 65536 5 4
+Finished in 1 hours, 49 minutes, and 19.966536 seconds
+1.202206 131072 5 0
+Finished in 2 hours, 32 minutes, and 17.589973 seconds
+234.725544 131072 5 2
+Finished in 6 hours, 35 minutes, and 57.065365 seconds
