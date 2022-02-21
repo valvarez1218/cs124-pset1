@@ -1,0 +1,2 @@
+1.203259 262144 5 0
+Finished in 10 hours, 38 minutes, and 45.189186 seconds
