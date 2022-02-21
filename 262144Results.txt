@@ -1,2 +1,4 @@
 1.203259 262144 5 0
 Finished in 10 hours, 38 minutes, and 45.189186 seconds
+331.624777 262144 5 2
+Finished in 26 hours, 34 minutes, and 19.118008 seconds
