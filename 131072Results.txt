@@ -1,4 +1,0 @@
-1677.919264 131072 5 3
-Finished in 6 hours, 55 minutes, and 55.373447 seconds
-4740.165523 131072 5 4
-Finished in 7 hours, 1 minutes, and 6.558200 seconds

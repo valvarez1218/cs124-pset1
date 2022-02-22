@@ -1,8 +1,0 @@
-1.203259 262144 5 0
-Finished in 10 hours, 38 minutes, and 45.189186 seconds
-331.624777 262144 5 2
-Finished in 26 hours, 34 minutes, and 19.118008 seconds
-2658.417779 262144 5 3
-Finished in 26 hours, 57 minutes, and 58.531017 seconds
-7949.132083 262144 5 4
-Finished in 27 hours, 17 minutes, and 13.514233 seconds
